@@ -1,13 +1,13 @@
 import folium
 import folium.plugins.locate_control as lc
-import ipinfo
+import getip
 import pandas as pd
 import numpy as np
 import xml.etree.ElementTree as et
 
 
 # parse an xml file by name
-tree = et.parse('data.xml', 'r')
+tree = et.parse('data.xml')
 root = tree.getroot()
 
 id = []
@@ -23,10 +23,7 @@ for child in root:
     longitude.append(root[i][2].text)
     i+=1
 
-
-access_token = '2c038c593ffea8'
-handler = ipinfo.getHandler(access_token)
-details = handler.getDetails()
+details = getip.info()
 
 # all items data
 def createMap():
@@ -34,7 +31,7 @@ def createMap():
     m = folium.Map(
         location=[details.latitude, details.longitude],
         zoom_start=12,
-        tiles='Stamen'
+        tiles='CartoDB Positron'
     )
     print('adding markers ...')
     i = 0
@@ -47,7 +44,7 @@ def createMap():
         i+=1 
 
     lc.LocateControl().add_to(m)
-    m.save('index1.html')
+    m.save('index.html')
     print('map created.')
 
     

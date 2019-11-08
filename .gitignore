@@ -2,5 +2,8 @@ bin/
 include/
 archive/
 lib/
+__pycache__/
 
 *.Python
+/getip.py
+/index1.py
