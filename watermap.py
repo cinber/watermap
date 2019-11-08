@@ -7,7 +7,7 @@ import xml.etree.ElementTree as et
 
 
 # parse an xml file by name
-tree = et.parse('data.xml')
+tree = et.parse('data.xml', 'r')
 root = tree.getroot()
 
 id = []
@@ -34,7 +34,7 @@ def createMap():
     m = folium.Map(
         location=[details.latitude, details.longitude],
         zoom_start=12,
-        tiles='Stamen Toner'
+        tiles='Stamen'
     )
     print('adding markers ...')
     i = 0
@@ -42,12 +42,12 @@ def createMap():
         # print(id[i])
         folium.Marker(location=[latitude[i], longitude[i]],
                     popup = name[i],  
-                    icon_color='blue',
+                    icon=folium.Icon(icon='cloud', color='green'),
         ).add_to(m)
         i+=1 
 
     lc.LocateControl().add_to(m)
-    m.save('index.html')
+    m.save('index1.html')
     print('map created.')
 
     
