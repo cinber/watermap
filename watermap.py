@@ -1,4 +1,5 @@
 import folium
+import folium.plugins.locate_control as lc
 import ipinfo
 import pandas as pd
 import numpy as np
@@ -9,7 +10,6 @@ import xml.etree.ElementTree as et
 tree = et.parse('data.xml')
 root = tree.getroot()
 
-print(root[0][0].text)
 id = []
 name = []
 latitude = []
@@ -23,29 +23,32 @@ for child in root:
     longitude.append(root[i][2].text)
     i+=1
 
-print(id)
 
 access_token = '2c038c593ffea8'
 handler = ipinfo.getHandler(access_token)
 details = handler.getDetails()
 
 # all items data
-print('creating map ...')
+def createMap():
+    print('creating map ...')
+    m = folium.Map(
+        location=[details.latitude, details.longitude],
+        zoom_start=12,
+        tiles='Stamen Toner'
+    )
+    print('adding markers ...')
+    i = 0
+    for child in root: 
+        # print(id[i])
+        folium.Marker(location=[latitude[i], longitude[i]],
+                    popup = name[i],  
+                    icon_color='blue',
+        ).add_to(m)
+        i+=1 
 
-m = folium.Map(
-    location=[details.latitude, details.longitude],
-    zoom_start=12,
-    tiles='Stamen Toner'
-)
-print('adding markers ...')
-i = 0
-for uid in root[i][0]: 
-    folium.Marker(location=[latitude[i], longitude[i]],
-    			  popup = name[i],  
-    			  icon_color='blue',
-    ).add_to(m)
-    i+=1 
+    lc.LocateControl().add_to(m)
+    m.save('index.html')
+    print('map created.')
 
-print('map created.')
-
-# m.save('index.html')
+    
+createMap()
